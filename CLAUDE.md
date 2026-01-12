@@ -61,23 +61,43 @@ npm run preview  # Preview production build locally
 ## Architecture
 
 ### Component Structure
-- **App.jsx**: Main application component handling state and API calls
-- **WeatherDisplay.jsx**: Weather card component with dynamic backgrounds and icons
+- **App.jsx**: Main application component handling state, API calls, and background image management
+- **WeatherDisplay.jsx**: Weather card with dynamic backgrounds, icons, webcam, and radar buttons
+- **WebcamModal.jsx**: Modal component for displaying live webcam feeds
+- **WeatherRadar.jsx**: Modal component for interactive weather radar/satellite view
+
+### Services
+- **unsplashService.js**: Fetches dynamic weather-based images from Unsplash API
+- **webcamService.js**: Manages webcam feed URLs for 8 major cities
 
 ### Key Features
+
+#### Visual Layers (4 Implementations)
+1. **Stock Images** (`weatherImages.js`): Curated Unsplash URLs for each weather condition
+2. **Dynamic Unsplash**: Fetches fresh images based on location + weather (requires API key)
+3. **Live Webcams**: YouTube Live embeds from major cities (Montreal, Toronto, Vancouver, NYC, London, Paris, Tokyo, Sydney)
+4. **Weather Radar**: Windy.com embed with interactive radar, clouds, temperature, and wind layers
+
+#### Core Features
 - **Geolocation**: Automatically detects user's location on load
 - **City Search**: Manual city search with Enter key submission
-- **Dynamic Theming**: Background gradients change based on weather conditions (Clear, Clouds, Rain, Snow, etc.)
+- **Demo Mode**: Mock data for 8 cities when no API key configured
+- **Dynamic Backgrounds**: Multiple fallback layers (Unsplash → Stock → Gradient)
 - **Weather Icons**: Emoji-based weather representations
 - **Responsive Design**: Mobile-friendly layout with media queries
+- **Modal System**: Webcam and radar viewers with keyboard shortcuts (Escape to close)
 
 ### API Integration Pattern
-- Uses `fetch` API for OpenWeatherMap requests
-- Supports both coordinate-based and city-based searches
+- **OpenWeatherMap**: Live weather data (coordinate-based and city-based searches)
+- **Unsplash**: Dynamic background images (optional, falls back to stock images)
+- **Windy.com**: Embedded radar/satellite (no API key needed)
+- **YouTube Live**: Webcam streams (embedded iframes)
+- All APIs use `fetch` with error handling
 - Metric units (Celsius) by default
-- Error handling for failed requests and missing API keys
 
 ### State Management
-- React `useState` for weather data, loading, and error states
-- `useEffect` hook triggers geolocation on component mount
+- React `useState` for weather data, loading, error, demo mode, and background images
+- Multiple `useEffect` hooks:
+  - Component mount: Auto-enable demo mode and fetch location
+  - Weather changes: Fetch Unsplash background image
 - No external state management library (vanilla React state)

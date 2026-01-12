@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import WeatherDisplay from './components/WeatherDisplay'
 import { getMockWeatherData } from './mockData'
+import { getBackgroundStyle } from './weatherImages'
+import { fetchWeatherBackground } from './services/unsplashService'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -8,6 +10,7 @@ function App() {
   const [error, setError] = useState(null)
   const [location, setLocation] = useState('')
   const [demoMode, setDemoMode] = useState(false)
+  const [backgroundImage, setBackgroundImage] = useState(null)
 
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY || 'demo'
   const hasValidApiKey = API_KEY && API_KEY !== 'demo' && API_KEY !== 'your_api_key_here'
@@ -116,8 +119,34 @@ function App() {
     getCurrentLocation()
   }, [demoMode])
 
+  // Fetch Unsplash background image when weather changes
+  useEffect(() => {
+    if (weather) {
+      const cityName = weather.name
+      const weatherCondition = weather.weather[0].main
+
+      fetchWeatherBackground(weatherCondition, cityName).then(imageUrl => {
+        if (imageUrl) {
+          setBackgroundImage(imageUrl)
+        }
+      })
+    }
+  }, [weather])
+
+  // Get background style based on current weather
+  const appStyle = weather ? (
+    backgroundImage ? {
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'fixed',
+      transition: 'background-image 0.5s ease-in-out'
+    } : getBackgroundStyle(weather.weather[0].main)
+  ) : {}
+
   return (
-    <div className="app">
+    <div className="app" style={appStyle}>
       <div className="container">
         {/* Demo Mode Banner */}
         {demoMode && (

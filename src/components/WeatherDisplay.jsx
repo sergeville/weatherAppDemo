@@ -1,4 +1,15 @@
+import { useState } from 'react'
+import WebcamModal from './WebcamModal'
+import WeatherRadar from './WeatherRadar'
+import { getWebcamForCity } from '../services/webcamService'
+
 function WeatherDisplay({ weather, location, isDemoMode = false }) {
+  const [showWebcam, setShowWebcam] = useState(false)
+  const [showRadar, setShowRadar] = useState(false)
+
+  const cityName = weather.name
+  const webcamData = getWebcamForCity(cityName)
+  const { lat, lon } = weather.coord
   const getWeatherIcon = (condition) => {
     const iconMap = {
       Clear: '☀️',
@@ -112,6 +123,44 @@ function WeatherDisplay({ weather, location, isDemoMode = false }) {
           })}</span>
         </div>
       </div>
+
+      {/* Action Buttons */}
+      <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        {webcamData && (
+          <button
+            className="webcam-btn"
+            onClick={() => setShowWebcam(true)}
+            title="View live webcam from this location"
+          >
+            📹 View Live Webcam
+          </button>
+        )}
+
+        <button
+          className="webcam-btn"
+          onClick={() => setShowRadar(true)}
+          title="View live weather radar and satellite"
+        >
+          🌍 View Weather Radar
+        </button>
+      </div>
+
+      {/* Webcam Modal */}
+      {showWebcam && (
+        <WebcamModal
+          webcamData={webcamData}
+          onClose={() => setShowWebcam(false)}
+        />
+      )}
+
+      {/* Weather Radar Modal */}
+      {showRadar && (
+        <WeatherRadar
+          lat={lat}
+          lon={lon}
+          onClose={() => setShowRadar(false)}
+        />
+      )}
     </div>
   )
 }
