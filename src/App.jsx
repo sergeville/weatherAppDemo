@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import WeatherDisplay from './components/WeatherDisplay'
+import WeatherAnimation from './components/WeatherAnimation'
 import { getMockWeatherData } from './mockData'
 import { getBackgroundStyle } from './weatherImages'
 import { fetchWeatherBackground } from './services/unsplashService'
@@ -221,6 +222,9 @@ function App() {
 
   return (
     <div className="app" style={appStyle}>
+      {/* Animated weather effects overlay */}
+      {weather && !loading && <WeatherAnimation weatherCondition={weather.weather[0].main} />}
+
       <div className="container">
         {/* Demo Mode Banner */}
         {demoMode && (
