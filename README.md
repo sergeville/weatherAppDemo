@@ -6,8 +6,11 @@ A beautiful, feature-rich React weather application that displays current weathe
 
 ### Core Weather Data
 - 🌍 Automatic geolocation detection
-- 🔍 Search weather by city name
+- 🔍 Search weather by city name with autocomplete
+- 🕐 Smart search history (remembers last 100 searches)
 - 🌡️ Detailed weather information (temperature, humidity, wind speed, pressure)
+- ❄️ Precipitation tracking (rain/snow accumulation)
+- 👁️ Visibility display in kilometers
 - 🌅 Sunrise and sunset times
 - 📱 Fully responsive design
 
@@ -104,9 +107,17 @@ The app automatically runs in demo mode with mock data for 9 cities if no API ke
 
 **Note:** Without Unsplash key, the app uses curated stock images instead.
 
-## How to Use Visual Features
+## How to Use
 
-1. **Background Images** - Automatically change based on weather
+### Search Features
+1. **City Search** - Type any city name and press Enter
+2. **Autocomplete** - Click the search box to see your recent searches
+3. **Smart Suggestions** - As you type, matching cities from your history appear
+4. **Instant Search** - Click any suggestion to load weather immediately
+5. **Geolocation** - Click "📍 Use My Location" for GPS-accurate weather
+
+### Visual Features
+1. **Background Images** - Automatically change based on weather and location
 2. **Live Webcam** - Click "📹 View Live Webcam" button (available for 8 major cities)
 3. **Weather Radar** - Click "🌍 View Weather Radar" for interactive satellite/radar view
 4. **Toggle Modes** - Switch between demo and live data anytime

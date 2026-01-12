@@ -81,11 +81,15 @@ npm run preview  # Preview production build locally
 #### Core Features
 - **Geolocation**: Automatically detects user's location on load
 - **City Search**: Manual city search with Enter key submission
+- **Search History**: Autocomplete dropdown with last 100 searches stored in localStorage
 - **Demo Mode**: Mock data for 9 cities when no API key configured (including Notre-Dame-du-Laus, QC)
 - **Dynamic Backgrounds**: Multiple fallback layers (Unsplash → Stock → Gradient)
 - **Weather Icons**: Emoji-based weather representations
+- **Precipitation Display**: Shows snow/rain accumulation (1h and 3h measurements)
+- **Visibility Tracking**: Displays atmospheric visibility in kilometers
 - **Responsive Design**: Mobile-friendly layout with media queries
 - **Modal System**: Webcam and radar viewers with keyboard shortcuts (Escape to close)
+- **Debugging**: Comprehensive console.log tracing for API calls and errors
 
 ### API Integration Pattern
 - **OpenWeatherMap**: Live weather data (coordinate-based and city-based searches)
@@ -100,4 +104,21 @@ npm run preview  # Preview production build locally
 - Multiple `useEffect` hooks:
   - Component mount: Auto-enable demo mode and fetch location
   - Weather changes: Fetch Unsplash background image
+  - Search history: Load from localStorage on mount
+- **localStorage Integration**:
+  - `weatherSearchHistory`: Stores last 100 city searches as JSON array
+  - Persists across browser sessions
+  - Automatically removes duplicates (case-insensitive)
+  - FIFO (First In, First Out) when limit reached
 - No external state management library (vanilla React state)
+
+### Search History Implementation
+- **Autocomplete Dropdown**: Shows up to 10 suggestions filtered by user input
+- **Smart Filtering**: Case-insensitive substring matching
+- **Instant Search**: Click suggestion to immediately fetch weather
+- **Keyboard Support**: Enter key to search from input field
+- **UX Details**:
+  - 200ms blur delay for better click handling
+  - Smooth slideDown animation (0.2s)
+  - Clock icon (🕐) indicates historical searches
+  - Hover effects with background color change
