@@ -88,7 +88,7 @@ weatherAppDemo/
 ## API Key Setup
 
 ### Demo Mode (No Keys Required)
-The app automatically runs in demo mode with mock data for 8 major cities if no API keys are configured. Try searching for: Montreal, Toronto, Vancouver, London, Paris, Tokyo, New York, Sydney.
+The app automatically runs in demo mode with mock data for 9 cities if no API keys are configured. Try searching for: Montreal, Notre-Dame-du-Laus, Toronto, Vancouver, London, Paris, Tokyo, New York, Sydney.
 
 ### Live Weather (OpenWeatherMap - Required)
 1. Visit [https://openweathermap.org/api](https://openweathermap.org/api)

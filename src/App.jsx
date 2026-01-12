@@ -172,7 +172,7 @@ function App() {
           <div className="search-container">
             <input
               type="text"
-              placeholder={demoMode ? "Try: Montreal, Toronto, Paris, Tokyo..." : "Enter city name..."}
+              placeholder={demoMode ? "Try: Montreal, Notre-Dame-du-Laus, Toronto, Paris..." : "Enter city name..."}
               onKeyPress={(e) => {
                 if (e.key === 'Enter' && e.target.value) {
                   fetchWeatherByCity(e.target.value)

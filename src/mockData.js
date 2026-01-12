@@ -104,6 +104,22 @@ export const mockCityData = {
     sys: { ...mockWeatherData.sys, country: 'AU' },
     weather: [{ id: 800, main: 'Clear', description: 'clear sky', icon: '01d' }],
     main: { temp: 28.0, feels_like: 29.5, temp_min: 25.0, temp_max: 31.0, pressure: 1014, humidity: 65 }
+  },
+  'Notre-Dame-du-Laus': {
+    ...mockWeatherData,
+    name: 'Notre-Dame-du-Laus',
+    coord: { lon: -75.6333, lat: 46.0833 },
+    sys: { ...mockWeatherData.sys, country: 'CA' },
+    weather: [{ id: 601, main: 'Snow', description: 'moderate snow', icon: '13d' }],
+    main: { temp: -12.5, feels_like: -18.2, temp_min: -15.0, temp_max: -10.0, pressure: 1018, humidity: 82 }
+  },
+  'Notre Dame du Laus': {
+    ...mockWeatherData,
+    name: 'Notre-Dame-du-Laus',
+    coord: { lon: -75.6333, lat: 46.0833 },
+    sys: { ...mockWeatherData.sys, country: 'CA' },
+    weather: [{ id: 601, main: 'Snow', description: 'moderate snow', icon: '13d' }],
+    main: { temp: -12.5, feels_like: -18.2, temp_min: -15.0, temp_max: -10.0, pressure: 1018, humidity: 82 }
   }
 }
 

@@ -81,7 +81,7 @@ npm run preview  # Preview production build locally
 #### Core Features
 - **Geolocation**: Automatically detects user's location on load
 - **City Search**: Manual city search with Enter key submission
-- **Demo Mode**: Mock data for 8 cities when no API key configured
+- **Demo Mode**: Mock data for 9 cities when no API key configured (including Notre-Dame-du-Laus, QC)
 - **Dynamic Backgrounds**: Multiple fallback layers (Unsplash → Stock → Gradient)
 - **Weather Icons**: Emoji-based weather representations
 - **Responsive Design**: Mobile-friendly layout with media queries
