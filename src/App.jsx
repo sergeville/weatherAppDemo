@@ -21,34 +21,51 @@ function App() {
   const loadDemoWeather = async (cityName = null) => {
     setLoading(true)
     setError(null)
+
+    console.log('🎭 Loading demo weather for:', cityName || 'default (Montreal)')
     await simulateDelay()
 
     const mockData = getMockWeatherData(cityName)
+    console.log('✅ Demo data loaded:', mockData.name)
+
     setWeather(mockData)
     setLocation(`${mockData.name}, ${mockData.sys.country}`)
     setLoading(false)
   }
 
   const fetchWeatherByCoords = async (lat, lon) => {
+    console.log('📍 Fetching weather by coordinates:', lat, lon)
+    console.log('📊 Demo mode:', demoMode)
+    console.log('🔑 API key configured:', hasValidApiKey)
+
     if (demoMode || !hasValidApiKey) {
+      console.log('🎭 Using demo mode for coordinates')
       await loadDemoWeather()
       return
     }
 
     try {
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+      console.log('🌐 API Request URL:', url.replace(API_KEY, 'API_KEY_HIDDEN'))
+
       const response = await fetch(url)
+      console.log('📡 API Response status:', response.status, response.statusText)
 
       if (!response.ok) {
         const errorData = await response.json()
+        console.error('❌ API Error:', errorData)
         throw new Error(errorData.message || `API Error: ${response.status}`)
       }
 
       const data = await response.json()
+      console.log('✅ Weather data received for:', data.name)
+      console.log('📊 Full weather data:', data)
+
       setWeather(data)
       setLocation(`${data.name}, ${data.sys.country}`)
       setLoading(false)
     } catch (err) {
+      console.error('💥 Error fetching weather by coords:', err)
       setError(err.message)
       setLoading(false)
     }
@@ -58,25 +75,37 @@ function App() {
     setLoading(true)
     setError(null)
 
+    console.log('🔍 Search initiated for:', city)
+    console.log('📊 Demo mode:', demoMode)
+    console.log('🔑 API key configured:', hasValidApiKey)
+
     if (demoMode || !hasValidApiKey) {
+      console.log('🎭 Using demo mode for:', city)
       await loadDemoWeather(city)
       return
     }
 
     try {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+      console.log('🌐 API Request URL:', url.replace(API_KEY, 'API_KEY_HIDDEN'))
+
       const response = await fetch(url)
+      console.log('📡 API Response status:', response.status, response.statusText)
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message || 'City not found')
+        console.error('❌ API Error:', errorData)
+        throw new Error(`City not found: "${city}". Try the exact city name (e.g., "Notre-Dame-du-Laus")`)
       }
 
       const data = await response.json()
+      console.log('✅ Weather data received:', data)
+
       setWeather(data)
       setLocation(`${data.name}, ${data.sys.country}`)
       setLoading(false)
     } catch (err) {
+      console.error('💥 Error fetching weather:', err)
       setError(err.message)
       setLoading(false)
     }
