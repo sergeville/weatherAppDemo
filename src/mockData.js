@@ -26,6 +26,11 @@ export const mockWeatherData = {
   clouds: {
     all: 90
   },
+  snow: {
+    '1h': 1.5,
+    '3h': 3.2
+  },
+  visibility: 8000,
   dt: 1736689200,
   sys: {
     type: 1,
@@ -47,7 +52,9 @@ export const mockCityData = {
     name: 'Montreal',
     sys: { ...mockWeatherData.sys, country: 'CA' },
     weather: [{ id: 601, main: 'Snow', description: 'light snow', icon: '13d' }],
-    main: { temp: -5.2, feels_like: -10.8, temp_min: -7.0, temp_max: -3.5, pressure: 1015, humidity: 78 }
+    main: { temp: -5.2, feels_like: -10.8, temp_min: -7.0, temp_max: -3.5, pressure: 1015, humidity: 78 },
+    snow: { '1h': 1.5, '3h': 3.2 },
+    visibility: 8000
   },
   'Toronto': {
     ...mockWeatherData,
@@ -63,7 +70,9 @@ export const mockCityData = {
     coord: { lon: -123.1207, lat: 49.2827 },
     sys: { ...mockWeatherData.sys, country: 'CA' },
     weather: [{ id: 500, main: 'Rain', description: 'light rain', icon: '10d' }],
-    main: { temp: 8.5, feels_like: 6.2, temp_min: 6.0, temp_max: 10.0, pressure: 1012, humidity: 85 }
+    main: { temp: 8.5, feels_like: 6.2, temp_min: 6.0, temp_max: 10.0, pressure: 1012, humidity: 85 },
+    rain: { '1h': 2.5, '3h': 6.8 },
+    visibility: 10000
   },
   'London': {
     ...mockWeatherData,
@@ -111,7 +120,9 @@ export const mockCityData = {
     coord: { lon: -75.6333, lat: 46.0833 },
     sys: { ...mockWeatherData.sys, country: 'CA' },
     weather: [{ id: 601, main: 'Snow', description: 'moderate snow', icon: '13d' }],
-    main: { temp: -12.5, feels_like: -18.2, temp_min: -15.0, temp_max: -10.0, pressure: 1018, humidity: 82 }
+    main: { temp: -12.5, feels_like: -18.2, temp_min: -15.0, temp_max: -10.0, pressure: 1018, humidity: 82 },
+    snow: { '1h': 2.0, '3h': 5.5 },
+    visibility: 6000
   },
   'Notre Dame du Laus': {
     ...mockWeatherData,
@@ -119,7 +130,9 @@ export const mockCityData = {
     coord: { lon: -75.6333, lat: 46.0833 },
     sys: { ...mockWeatherData.sys, country: 'CA' },
     weather: [{ id: 601, main: 'Snow', description: 'moderate snow', icon: '13d' }],
-    main: { temp: -12.5, feels_like: -18.2, temp_min: -15.0, temp_max: -10.0, pressure: 1018, humidity: 82 }
+    main: { temp: -12.5, feels_like: -18.2, temp_min: -15.0, temp_max: -10.0, pressure: 1018, humidity: 82 },
+    snow: { '1h': 2.0, '3h': 5.5 },
+    visibility: 6000
   }
 }
 

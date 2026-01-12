@@ -130,6 +130,36 @@ function WeatherDisplay({ weather, location, isDemoMode = false }) {
             <p className="detail-value">{weather.main.pressure} hPa</p>
           </div>
         </div>
+
+        {/* Precipitation (Snow/Rain) */}
+        {(weather.snow || weather.rain) && (
+          <div className="detail-item">
+            <span className="detail-icon">{weather.snow ? '❄️' : '🌧️'}</span>
+            <div>
+              <p className="detail-label">Precipitation</p>
+              <p className="detail-value">
+                {weather.snow ? (
+                  weather.snow['1h'] ? `${weather.snow['1h']} cm (1h)` :
+                  weather.snow['3h'] ? `${weather.snow['3h']} cm (3h)` : 'Light snow'
+                ) : (
+                  weather.rain['1h'] ? `${weather.rain['1h']} mm (1h)` :
+                  weather.rain['3h'] ? `${weather.rain['3h']} mm (3h)` : 'Light rain'
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Visibility */}
+        {weather.visibility && (
+          <div className="detail-item">
+            <span className="detail-icon">👁️</span>
+            <div>
+              <p className="detail-label">Visibility</p>
+              <p className="detail-value">{(weather.visibility / 1000).toFixed(1)} km</p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="sun-times">
