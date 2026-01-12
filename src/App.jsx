@@ -11,9 +11,51 @@ function App() {
   const [location, setLocation] = useState('')
   const [demoMode, setDemoMode] = useState(false)
   const [backgroundImage, setBackgroundImage] = useState(null)
+  const [searchHistory, setSearchHistory] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
 
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY || 'demo'
   const hasValidApiKey = API_KEY && API_KEY !== 'demo' && API_KEY !== 'your_api_key_here'
+
+  // Load search history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('weatherSearchHistory')
+    if (savedHistory) {
+      try {
+        const history = JSON.parse(savedHistory)
+        setSearchHistory(history)
+      } catch (e) {
+        console.error('Failed to load search history:', e)
+      }
+    }
+  }, [])
+
+  // Save search to history
+  const addToSearchHistory = (cityName) => {
+    if (!cityName || cityName.trim() === '') return
+
+    setSearchHistory(prevHistory => {
+      // Remove duplicates and add to the beginning
+      const filtered = prevHistory.filter(item => item.toLowerCase() !== cityName.toLowerCase())
+      const newHistory = [cityName, ...filtered].slice(0, 100) // Limit to 100 entries
+
+      // Save to localStorage
+      localStorage.setItem('weatherSearchHistory', JSON.stringify(newHistory))
+
+      return newHistory
+    })
+  }
+
+  // Get filtered suggestions based on input
+  const getSuggestions = () => {
+    if (!searchInput || searchInput.trim() === '') return searchHistory.slice(0, 10)
+
+    const input = searchInput.toLowerCase()
+    return searchHistory
+      .filter(city => city.toLowerCase().includes(input))
+      .slice(0, 10)
+  }
 
   // Simulate API delay for demo mode
   const simulateDelay = (ms = 800) => new Promise(resolve => setTimeout(resolve, ms))
@@ -100,6 +142,9 @@ function App() {
 
       const data = await response.json()
       console.log('✅ Weather data received:', data)
+
+      // Add to search history
+      addToSearchHistory(city)
 
       setWeather(data)
       setLocation(`${data.name}, ${data.sys.country}`)
@@ -199,17 +244,45 @@ function App() {
         <header className="header">
           <h1>Weather App</h1>
           <div className="search-container">
-            <input
-              type="text"
-              placeholder={demoMode ? "Try: Montreal, Notre-Dame-du-Laus, Toronto, Paris..." : "Enter city name..."}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' && e.target.value) {
-                  fetchWeatherByCity(e.target.value)
-                  e.target.value = ''
-                }
-              }}
-              className="search-input"
-            />
+            <div className="search-input-wrapper">
+              <input
+                type="text"
+                placeholder={demoMode ? "Try: Montreal, Notre-Dame-du-Laus, Toronto, Paris..." : "Enter city name..."}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && searchInput.trim()) {
+                    fetchWeatherByCity(searchInput)
+                    setSearchInput('')
+                    setShowSuggestions(false)
+                  }
+                }}
+                className="search-input"
+              />
+
+              {/* Search History Suggestions */}
+              {showSuggestions && getSuggestions().length > 0 && (
+                <div className="search-suggestions">
+                  {getSuggestions().map((suggestion, index) => (
+                    <div
+                      key={index}
+                      className="suggestion-item"
+                      onClick={() => {
+                        fetchWeatherByCity(suggestion)
+                        setSearchInput('')
+                        setShowSuggestions(false)
+                      }}
+                    >
+                      <span className="suggestion-icon">🕐</span>
+                      <span className="suggestion-text">{suggestion}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button onClick={getCurrentLocation} className="location-btn">
               📍 {demoMode ? 'Demo Location' : 'Use My Location'}
             </button>
