@@ -185,6 +185,24 @@ body {
   color: white;
   animation: fadeIn 0.5s ease-in;
   position: relative;
+  transition: background-image 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+/* Enhanced text shadows for better readability on image backgrounds */
+.weather-card .location-info h2,
+.weather-card .location-info .date,
+.weather-card .temperature,
+.weather-card .weather-description {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7),
+               0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.weather-card .detail-label,
+.weather-card .detail-value,
+.weather-card .sun-item {
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7),
+               0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes fadeIn {

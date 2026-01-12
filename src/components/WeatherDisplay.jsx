@@ -1,15 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import WebcamModal from './WebcamModal'
 import WeatherRadar from './WeatherRadar'
 import { getWebcamForCity } from '../services/webcamService'
+import { getWeatherBackground } from '../weatherImages'
+import { fetchWeatherBackground } from '../services/unsplashService'
 
 function WeatherDisplay({ weather, location, isDemoMode = false }) {
   const [showWebcam, setShowWebcam] = useState(false)
   const [showRadar, setShowRadar] = useState(false)
+  const [cardBackgroundImage, setCardBackgroundImage] = useState(null)
 
   const cityName = weather.name
   const webcamData = getWebcamForCity(cityName)
   const { lat, lon } = weather.coord
+
+  // Fetch dynamic background for the card
+  useEffect(() => {
+    const weatherCondition = weather.weather[0].main
+
+    // Try to fetch dynamic Unsplash image
+    fetchWeatherBackground(weatherCondition, cityName).then(imageUrl => {
+      if (imageUrl) {
+        setCardBackgroundImage(imageUrl)
+      } else {
+        // Fallback to stock images
+        setCardBackgroundImage(getWeatherBackground(weatherCondition))
+      }
+    })
+  }, [weather, cityName])
   const getWeatherIcon = (condition) => {
     const iconMap = {
       Clear: '☀️',
@@ -41,7 +59,14 @@ function WeatherDisplay({ weather, location, isDemoMode = false }) {
   }
 
   const weatherMain = weather.weather[0].main
-  const cardStyle = {
+
+  // Card style with background image
+  const cardStyle = cardBackgroundImage ? {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${cardBackgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
+  } : {
     background: getBackgroundGradient(weatherMain)
   }
 
