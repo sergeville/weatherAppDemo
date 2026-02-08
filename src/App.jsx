@@ -6,18 +6,28 @@ import { getBackgroundStyle } from './weatherImages'
 import { fetchWeatherBackground } from './services/unsplashService'
 
 function App() {
+  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY || 'demo'
+  const hasValidApiKey = API_KEY && API_KEY !== 'demo' && API_KEY !== 'your_api_key_here'
+
+  // Initialize demo mode based on API key availability
+  const [demoMode, setDemoMode] = useState(!hasValidApiKey)
+  
   const [weather, setWeather] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [location, setLocation] = useState('')
-  const [demoMode, setDemoMode] = useState(false)
   const [backgroundImage, setBackgroundImage] = useState(null)
   const [searchHistory, setSearchHistory] = useState([])
   const [searchInput, setSearchInput] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
 
-  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY || 'demo'
-  const hasValidApiKey = API_KEY && API_KEY !== 'demo' && API_KEY !== 'your_api_key_here'
+  // Debug API Key status on mount
+  useEffect(() => {
+    console.log('🔑 API Key Status:', hasValidApiKey ? 'Valid' : 'Invalid/Missing')
+    if (hasValidApiKey) {
+      console.log('🔑 Key detected (first 4 chars):', API_KEY.substring(0, 4))
+    }
+  }, [])
 
   // Load search history from localStorage on mount
   useEffect(() => {
@@ -186,21 +196,31 @@ function App() {
     setLoading(true)
   }
 
+  // Fetch weather on mount or when demo mode toggles
   useEffect(() => {
-    // Auto-enable demo mode if no valid API key
-    if (!hasValidApiKey) {
-      setDemoMode(true)
-    }
     getCurrentLocation()
   }, [demoMode])
+
+  // Determine the visual condition based on cloud coverage
+  const getVisualCondition = (w) => {
+    if (!w) return 'Clear';
+    const main = w.weather[0].main;
+    const cloudiness = w.clouds ? w.clouds.all : 0;
+    
+    // If it's "Clouds" but coverage is very low (< 20%), show "Clear" visuals (Sunny)
+    if (main === 'Clouds' && cloudiness < 20) {
+      return 'Clear';
+    }
+    return main;
+  };
 
   // Fetch Unsplash background image when weather changes
   useEffect(() => {
     if (weather) {
       const cityName = weather.name
-      const weatherCondition = weather.weather[0].main
+      const visualCondition = getVisualCondition(weather);
 
-      fetchWeatherBackground(weatherCondition, cityName).then(imageUrl => {
+      fetchWeatherBackground(visualCondition, cityName).then(imageUrl => {
         if (imageUrl) {
           setBackgroundImage(imageUrl)
         }
@@ -217,7 +237,7 @@ function App() {
       backgroundRepeat: 'no-repeat',
       backgroundAttachment: 'fixed',
       transition: 'background-image 0.5s ease-in-out'
-    } : getBackgroundStyle(weather.weather[0].main)
+    } : getBackgroundStyle(getVisualCondition(weather))
   ) : {}
 
   return (
