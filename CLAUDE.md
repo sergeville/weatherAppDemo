@@ -2,6 +2,26 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🔍 Issue Resolution (Automatic)
+
+**CRITICAL**: Before solving ANY problem, search the knowledge base FIRST:
+
+```bash
+# Search for similar issues
+grep -i "keyword" ~/Documents/Documentation/System/ISSUES_KNOWLEDGE_BASE.md
+```
+
+**When encountering issues**:
+1. Search knowledge base for existing solutions
+2. If found, apply documented solution
+3. If not found, solve problem and document in knowledge base
+4. Reference issue ID in session logs
+
+**Full protocol**: See `~/Documents/Documentation/System/SYSTEM_PROMPT.md`
+
+**Knowledge Base**: `~/Documents/Documentation/System/ISSUES_KNOWLEDGE_BASE.md`
+
+---
 ## Repository Overview
 
 This is a React-based weather application that displays current weather conditions for any location worldwide. The app uses the OpenWeatherMap API and features automatic geolocation detection.
